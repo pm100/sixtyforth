@@ -20,8 +20,8 @@ SECTION .bss
 
 emitbuf RESB 1
 
-
-SECTION .rodata
+;  marked as exec because some code ends up there
+SECTION .rodata exec
 
 
 ; Start of Dictionary
@@ -1924,8 +1924,8 @@ scansign:
         DQ EXIT
 
 
-
-SECTION .data
+; code ends up here too
+SECTION .data exec
 
 vRESET:
         DQ stdexe
