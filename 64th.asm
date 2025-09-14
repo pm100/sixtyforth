@@ -1,6 +1,5 @@
 BITS 64
 
-extern _CRT_INIT
 sys_write EQU 1
 
 extern _binary_rc_4_start
@@ -22,7 +21,7 @@ emitbuf RESB 1
 
 ;  marked as exec because some code ends up there
 SECTION .rodata exec
-
+platform: db PLATFORM_DEF
 
 ; Start of Dictionary
 ; The Dictionary is a key Forth datastructure.
@@ -94,6 +93,15 @@ EXECUTE:
         mov rax, [rdx]
         jmp rax
         CtoL(EXECUTE)
+
+        DQ 8
+        DQ 'PLATFORM'
+PLATFORM:
+        DQ $+8
+        ; PLATFORM (-- u)
+        mov rax, [platform]
+        jmp pushrax
+        CtoL(PLATFORM)
 
         DQ 4
         DQ 'EXIT'
@@ -2010,7 +2018,7 @@ dictfree TIMES 8000 DQ 0
 SECTION .text
 GLOBAL _start
 _start:
-   call _CRT_INITxx
+        
 dreset: ; ABORT jumps here (data reset)
         ; Initialise the model registers.
         mov rbp, stack
